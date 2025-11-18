@@ -4,7 +4,7 @@ The project is based on a case study involving **Rivian** and **Southern Califor
 
 ---
 
-## 📘 Project Context
+## Project Context
 
 Rivian’s Smart Charging feature currently optimizes home charging for lower utility costs.  
 SCE is evaluating an expanded version that delays charging by 8 hours **if** the later window produces **≥10% lower emissions**.
@@ -16,7 +16,7 @@ This project develops the ML model and business strategy that such a collaborati
 
 ---
 
-## 🧠 Objectives
+## Objectives
 
 ### **Technical**
 - Predict whether delaying charging by 8 hours yields at least **10% lower CO₂ emissions**.
@@ -34,7 +34,7 @@ This project develops the ML model and business strategy that such a collaborati
 
 ---
 
-## ⚙️ Methodology
+## Methodology
 
 1. **Data Integration**
    - Joined ~150k home charging sessions (2024) to CAISO hourly emissions data (2023–2024).
@@ -65,7 +65,7 @@ This project develops the ML model and business strategy that such a collaborati
 
 ---
 
-## 📈 Key Findings (Template – fill with your results)
+## Key Findings (Template – fill with your results)
 
 - **Perfect assignment** could reduce emissions by *X lb CO₂ per vehicle per year*.  
 - **Model-based assignment** captures ~*Y%* of the potential reductions.  
