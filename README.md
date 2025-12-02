@@ -1,75 +1,79 @@
 # EV Smart Charging: Rivian & SCE Emissions Optimization and Incentive Analysis
 
-The project is based on a case study involving **Rivian** and **Southern California Edison (SCE)**, exploring how EV smart charging can reduce grid emissions and create new business value.
+This project builds a full end-to-end pipeline to identify cleaner and cheaper EV charging windows using real emissions data. We train a binary classifier to predict whether delaying charging by eight hours reduces grid emissions, apply the model to Rivian charging sessions, quantify emissions savings, translate them into incentive payments, and estimate business impact through price elasticity analysis.
 
 ---
 
-## Project Context
+## Overview
 
-Rivian’s Smart Charging feature currently optimizes home charging for lower utility costs.  
-SCE is evaluating an expanded version that delays charging by 8 hours **if** the later window produces **≥10% lower emissions**.
+Electric vehicles are often charged during high-emission evening hours. Southern California Edison (SCE) is exploring incentives to shift charging to cleaner periods, while Rivian is interested in how this shift affects customer cost and vehicle sales.  
+This project evaluates whether smart-charging automation can:
 
-The goal:  
-A simple, automated system that reduces carbon intensity **without requiring any behavior change from EV drivers**.
-
-This project develops the ML model and business strategy that such a collaboration would require.
+- Reduce overall grid emissions  
+- Lower charging costs for drivers  
+- Increase Rivian EV adoption via improved affordability  
 
 ---
 
 ## Objectives
 
-### **Technical**
-- Predict whether delaying charging by 8 hours yields at least **10% lower CO₂ emissions**.
-- Train the classifier using **2023 CAISO emissions data**.
-- Evaluate model vs. perfect assignment vs. baseline.
-
-### **Business**
-- Convert emissions savings into customer incentives under SCE’s proposed **$1–$10 per lb CO₂ avoided**.
-- Estimate monthly savings for drivers.
-- Use EV sales elasticity to model potential uplift if Rivian bundles savings into lease/financing.
-- Propose a **win–win–win strategy** for:
-  - Rivian  
-  - Southern California Edison  
-  - EV customers  
+- Build a binary classifier using **2023 CAISO emissions** to determine whether a delayed 8-hour charging window is cleaner than charging immediately  
+- Apply predictions to **2024 Rivian charging sessions**  
+- Compare emissions under Baseline, Perfect (oracle), and Model assignments  
+- Quantify emissions savings and misclassification penalties  
+- Convert avoided emissions into **SCE incentive dollars**  
+- Estimate **sales uplift** using a price elasticity model  
 
 ---
 
 ## Methodology
 
-1. **Data Integration**
-   - Joined ~150k home charging sessions (2024) to CAISO hourly emissions data (2023–2024).
-   - Computed two windows per charging session:  
-     - `A = [t, t+8)`  
-     - `B = [t+8, t+16)`  
-   - Label = 1 if `B < 0.9 × A`.
+1. **Label Generation:**  
+   Compare emissions in two windows (immediate vs. delayed). Assign a delay label if the delayed window is ≥10% cleaner.
 
-2. **Feature Engineering**
-   - Hour-of-day, day-of-week, month, weekend/holiday flags
-   - Emissions rolling mean & volatility
-   - Lagged emissions at t–1…t–24
+2. **Feature Engineering:**  
+   Time-based features (hour, weekday), rolling averages, lagged emissions, and volatility indicators.
 
-3. **Modeling**
-   - Logistic Regression baseline  
-   - XGBoost with monotone constraints  
-   - Evaluation on 2024 sessions
+3. **Modeling:**  
+   Logistic Regression / Random Forest with ROC-AUC evaluation and calibration checks.
 
-4. **Impact Measurement**
-   - Δ Emissions per session and per vehicle/year
-   - Total excess emissions due to model errors
-   - Cutoff tuning + penalty recommendations
+4. **2024 Application:**  
+   Merge predicted labels with real charging sessions to compute emissions under each assignment strategy.
 
-5. **Business Modeling**
-   - Monetized per-vehicle CO₂ savings  
-   - Computed payment-equivalent savings  
-   - Estimated Rivian sales uplift via log-log elasticity model
+5. **Incentive & Elasticity Analysis:**  
+   Convert emissions savings into dollars and evaluate how lower monthly costs affect EV sales.
 
 ---
 
-## Key Findings (Template – fill with your results)
+## Key Results
 
-- **Perfect assignment** could reduce emissions by *X lb CO₂ per vehicle per year*.  
-- **Model-based assignment** captures ~*Y%* of the potential reductions.  
-- **Financial impact:** equivalent to lowering effective monthly EV payments by **$Z–$Z₂ per driver**.  
-- **Elasticity results:** Rivian could see *A–B%* potential sales lift under ideal conditions.  
-- **Strategic result:** high alignment — substantial benefits for SCE and customers with minimal friction for Rivian.
+### Emissions Impact
+- **Baseline:** 4,939,906 lbs CO₂/year  
+- **Perfect Assignment:** 4,240,556 lbs  
+- **Model Assignment:** 4,463,540 lbs  
 
+Model captures **68.12%** of ideal savings and avoids **476,366 lbs** of CO₂ vs. baseline.
+
+### Financial Impact (SCE Incentives)
+- Annual savings per driver: **$233 – $1,164**  
+- Monthly savings: **$19 – $97**  
+
+### Rivian Sales Impact
+- Price elasticity: **–3.1981**  
+- Estimated sales uplift from incentives: **10.7% – 21.3%**
+
+---
+
+## Recommendation & Conclusion
+
+Our analysis shows that shifting EV charging to cleaner time windows creates real environmental and financial benefits. The model captures **68% of the ideal emissions savings**, reducing annual CO₂ output by over **476,000 lbs** compared to immediate charging. When these savings are translated into SCE’s incentive structure, drivers receive **meaningful monthly savings** that improve the total cost of ownership for Rivian vehicles.
+
+To maximize adoption, we recommend that Rivian implement **automated smart-charging** in the vehicle app, allowing drivers to opt in once and let the system handle scheduling based on emissions forecasts. SCE should support this with **simple, predictable incentive payments** that directly reward lower-emission charging behavior.
+
+Overall, the combination of optimized charging windows, financial incentives, and app-based automation creates a **win–win–win**:  
+- **SCE** reduces peak-hour emissions,  
+- **Drivers** save money with no extra effort, and  
+- **Rivian** strengthens its value proposition and can see a **10–21% uplift** in vehicle demand.
+
+Smart charging is technically feasible, financially attractive, and strategically aligned for all stakeholders.  
+The conclusion is clear: **this program is worth implementing at scale.**
