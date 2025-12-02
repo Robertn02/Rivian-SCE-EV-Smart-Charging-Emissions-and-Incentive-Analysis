@@ -1,4 +1,4 @@
-# EV Smart Charging: Rivian & SCE Emissions Optimization and Business Strategy
+# EV Smart Charging: Rivian & SCE Emissions Optimization and Incentive Analysis
 
 The project is based on a case study involving **Rivian** and **Southern California Edison (SCE)**, exploring how EV smart charging can reduce grid emissions and create new business value.
 
